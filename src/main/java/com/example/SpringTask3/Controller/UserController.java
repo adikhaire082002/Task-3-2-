@@ -5,6 +5,8 @@ import com.example.SpringTask3.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,12 +24,14 @@ public class UserController {
         return  new ResponseEntity<>("User added successfully",HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/getUser")
     public ResponseEntity<?> getUser(@RequestParam int id){
         User user = userService.get(id);
         return  new ResponseEntity<>(user, HttpStatus.FOUND);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/allUsers")
     public ResponseEntity<?> getAllUsers(){
         List<User> users = userService.findAll();
